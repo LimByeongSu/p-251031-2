@@ -1,39 +1,23 @@
-package com.back.global.security;
+package com.back.global.security
 
-import lombok.Getter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.util.Collection;
-import java.util.Map;
+import lombok.Getter
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.User
+import org.springframework.security.oauth2.core.user.OAuth2User
 
 @Getter
-public class SecurityUser extends User implements OAuth2User {
-
-    private Long id;
-    private String nickname;
-    public SecurityUser(Long id, String username, String password, String nickname, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
-        this.id = id;
-        this.nickname = nickname;
+class SecurityUser(
+    val id: Long,
+    username: String,
+    password: String,
+    val nickname: String,
+    authorities: Collection<out GrantedAuthority>
+) : User(username, password, authorities), OAuth2User {
+    override fun getAttributes(): MutableMap<String, Any> {
+        return mutableMapOf()
     }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return Map.of();
-    }
-
-    @Override
-    public String getName() {
-        return nickname;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getNickname() {
-        return nickname;
+    override fun getName(): String {
+        return nickname
     }
 }
