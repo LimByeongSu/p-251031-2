@@ -28,4 +28,12 @@ public class SecurityUser extends User implements OAuth2User {
     public String getName() {
         return nickname;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
 }
