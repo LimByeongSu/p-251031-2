@@ -1,45 +1,45 @@
-package com.back.global.security;
+package com.back.global.security
 
-import com.back.domain.member.member.entity.Member;
-import com.back.domain.member.member.service.MemberService;
-import com.back.global.rq.Rq;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import com.back.domain.member.member.service.MemberService
+import com.back.global.rq.Rq
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.Authentication
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
+import org.springframework.stereotype.Component
+import java.io.IOException
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 @Component
-@RequiredArgsConstructor
-public class CustomOAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+class CustomOAuth2LoginSuccessHandler(
+    private val memberService: MemberService,
+    private val rq: Rq
+) : AuthenticationSuccessHandler {
 
-    private final MemberService memberService;
-    private final Rq rq;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    @Throws(IOException::class, ServletException::class)
+    override fun onAuthenticationSuccess(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        authentication: Authentication
+    ) {
+        val member = rq.actor!!
+        val accessToken = memberService.genAccessToken(member)
+        val apiKey = member.apiKey
 
-        Member member = rq.getActor();
-        String accessToken = memberService.genAccessToken(member);
-        String apiKey = member.getApiKey();
+        rq.setCookie("accessToken", accessToken)
+        rq.setCookie("apiKey", apiKey)
 
-        rq.setCookie("accessToken", accessToken);
-        rq.setCookie("apiKey", apiKey);
+        val state = request.getParameter("state")
+        var redirectUrl = "/"
 
-        String state = request.getParameter("state");
-        String redirectUrl = "/";
-
-        if(!state.isBlank()) {
-            String decodedState = new String(Base64.getUrlDecoder().decode(state), StandardCharsets.UTF_8);
-            redirectUrl = decodedState.split("#")[1];
+        if (!state.isNullOrBlank()) {
+            val decodedState = String(Base64.getUrlDecoder().decode(state), StandardCharsets.UTF_8)
+            redirectUrl = decodedState.split("#".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         }
 
-        rq.sendRedirect(redirectUrl);
+        rq.sendRedirect(redirectUrl)
     }
 }
