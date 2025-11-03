@@ -29,4 +29,15 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreateDate() {
+        return createDate;
+    }
+
+    public LocalDateTime getModifyDate() {
+        return modifyDate;
+    }
 }
