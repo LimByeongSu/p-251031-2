@@ -42,6 +42,26 @@ public class Member extends BaseEntity {
         return nickname;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public String getProfileImgUrl() {
+        return profileImgUrl;
+    }
+
     public void updateApiKey(String apiKey) {
         this.apiKey = apiKey;
     }

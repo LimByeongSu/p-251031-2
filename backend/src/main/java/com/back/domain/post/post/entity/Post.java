@@ -70,4 +70,20 @@ public class Post extends BaseEntity {
         }
 
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public Member getAuthor() {
+        return author;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
 }
