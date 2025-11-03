@@ -5,7 +5,6 @@ import com.back.domain.post.comment.entity.Comment;
 import com.back.global.exception.ServiceException;
 import com.back.global.jpa.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor
-@Getter
 @Entity
 public class Post extends BaseEntity {
     private String title;

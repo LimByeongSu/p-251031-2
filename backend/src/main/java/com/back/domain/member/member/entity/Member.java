@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
-@Getter
 @Entity
 public class Member extends BaseEntity {
 
