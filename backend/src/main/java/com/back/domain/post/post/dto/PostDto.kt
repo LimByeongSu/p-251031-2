@@ -17,9 +17,9 @@ data class PostDto(
         post.id,
         post.createDate,
         post.modifyDate,
-        post.getTitle(),
-        post.getContent(),
-        post.getAuthor().id,
-        post.getAuthor().getName()
+        post.title,
+        post.content,
+        post.author.id,
+        post.author.getName()
     )
 }
