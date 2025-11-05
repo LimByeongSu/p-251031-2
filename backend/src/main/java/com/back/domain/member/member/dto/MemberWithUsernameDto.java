@@ -15,9 +15,9 @@ public record MemberWithUsernameDto(
 ) {
     public MemberWithUsernameDto(Member member) {
         this(
-                member.getId(),
-                member.getCreateDate(),
-                member.getModifyDate(),
+                member.id,
+                member.createDate,
+                member.modifyDate,
                 member.getUsername(),
                 member.getNickname(),
                 member.isAdmin()

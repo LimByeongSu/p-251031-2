@@ -14,12 +14,12 @@ data class PostDto(
     val authorName: String?
 ) {
     constructor(post: Post) : this(
-        post.getId(),
-        post.getCreateDate(),
-        post.getModifyDate(),
+        post.id,
+        post.createDate,
+        post.modifyDate,
         post.getTitle(),
         post.getContent(),
-        post.getAuthor().getId(),
+        post.getAuthor().id,
         post.getAuthor().getName()
     )
 }

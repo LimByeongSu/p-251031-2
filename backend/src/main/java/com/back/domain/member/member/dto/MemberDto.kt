@@ -12,9 +12,9 @@ data class MemberDto(
     val isAdmin: Boolean
 ) {
     constructor(member: Member) : this(
-        member.getId(),
-        member.getCreateDate(),
-        member.getModifyDate(),
+        member.id,
+        member.createDate,
+        member.modifyDate,
         member.getName(),
         member.isAdmin()
     )

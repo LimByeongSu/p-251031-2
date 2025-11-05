@@ -1,43 +1,41 @@
-package com.back.global.jpa.entity;
+package com.back.global.jpa.entity
 
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
+import jakarta.persistence.*
+import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
+import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.time.LocalDateTime
+import java.util.*
 
 @MappedSuperclass
-@Getter
-@EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
-
+@EntityListeners(AuditingEntityListener::class)
+abstract class BaseEntity(
+    @JvmField
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    @Setter(AccessLevel.PROTECTED)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Setter(AccessLevel.PROTECTED)
+    val id: Long    //비지니스 모델 상 id를 setter로 설정하는 부분이있어서 주 생성자에서 설정할수도 있게함
+    //자바는 Long? 로 쓰면 객체타입으로 판단하고
+    //Long 으로 쓰면 원시타입으로 판단한다.
+    //그래서 id.equals()같은 원시타입에서 못쓰는걸 쓴 비지니스가 있으면 수정이 필요하다.
+) {
+
 
     @CreatedDate
-    private LocalDateTime createDate;
+    lateinit var createDate: LocalDateTime
 
     @LastModifiedDate
-    private LocalDateTime modifyDate;
+    lateinit var modifyDate: LocalDateTime
 
-    public Long getId() {
-        return id;
+
+    override fun equals(other: Any?): Boolean {
+        if (other === this) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val that = other as BaseEntity
+        return id == that.id
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public LocalDateTime getModifyDate() {
-        return modifyDate;
+    override fun hashCode(): Int {
+        return Objects.hashCode(id)
     }
 }
