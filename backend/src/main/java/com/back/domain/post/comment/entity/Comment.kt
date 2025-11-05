@@ -1,59 +1,39 @@
-package com.back.domain.post.comment.entity;
+package com.back.domain.post.comment.entity
 
-import com.back.domain.member.member.entity.Member;
-import com.back.domain.post.post.entity.Post;
-import com.back.global.exception.ServiceException;
-import com.back.global.jpa.entity.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.back.domain.member.member.entity.Member
+import com.back.domain.post.post.entity.Post
+import com.back.global.exception.ServiceException
+import com.back.global.jpa.entity.BaseEntity
+import com.fasterxml.jackson.annotation.JsonIgnore
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.ManyToOne
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-public class Comment extends BaseEntity {
+class Comment(
+    @field:ManyToOne(fetch = FetchType.LAZY)
+    var author: Member,
 
-    private String content;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Post post;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member author;
+    @JvmField
+    var content: String,
 
-    public String getContent() {
-        return content;
+    @field:JsonIgnore
+    @field:ManyToOne(fetch = FetchType.LAZY)
+    var post: Post
+) : BaseEntity() {
+    fun update(content: String) {
+        this.content = content
     }
 
-    public Post getPost() {
-        return post;
-    }
-
-    public Member getAuthor() {
-        return author;
-    }
-
-    public Comment(Member author, String content, Post post) {
-        this.author = author;
-        this.content = content;
-        this.post = post;
-    }
-
-    public void update(String content) {
-        this.content = content;
-    }
-
-    public void checkActorModify(Member actor) {
-        if(!this.author.equals(actor)) {
-            throw new ServiceException("403-1", "댓글 수정 권한이 없습니다.");
+    fun checkActorModify(actor: Member?) {
+        if (author!=(actor)) {
+            throw ServiceException("403-1", "댓글 수정 권한이 없습니다.")
         }
     }
 
-    public void checkActorDelete(Member actor) {
-        if(!this.author.equals(actor)) {
-            throw new ServiceException("403-2", "댓글 삭제 권한이 없습니다.");
+    fun checkActorDelete(actor: Member?) {
+        if (author!=(actor)) {
+            throw ServiceException("403-2", "댓글 삭제 권한이 없습니다.")
         }
     }
 }
