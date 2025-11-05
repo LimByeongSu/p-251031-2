@@ -15,7 +15,7 @@ data class MemberDto(
         member.id,
         member.createDate,
         member.modifyDate,
-        member.getName(),
-        member.isAdmin()
+        member.name,
+        member.isAdmin
     )
 }
